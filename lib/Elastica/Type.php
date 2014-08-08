@@ -249,6 +249,29 @@ class Type implements SearchableInterface
 
         return $document;
     }
+    /**
+     * 
+     * @param string $id
+     * @param array $options
+     * @return boolean
+     */
+    public function existsDocument($id, $options = array())
+    {
+        $path = urlencode($id);
+        try {
+            $response = $this->request($path, Request::HEAD, array(), $options);
+            
+            $info = $response->getTransferInfo();
+            if ($info['http_code'] !== 200) {
+                return false;
+            }
+            
+        } catch (ResponseException $e) {
+            return false;
+        }
+        
+        return true;
+    }
 
     /**
      * @param string $id

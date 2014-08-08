@@ -812,6 +812,24 @@ class TypeTest extends BaseTest
             $client->getIndex($aliasName)->getType($typeName)->getMapping()
         );
     }
+    
+    public function testExistsDocument()
+    {
+        $index = $this->_createIndex();
+        $type = new Type($index, 'test');
+        $type->addDocument(new Document('existsDocument', array('name' => 'ruflin')));
+        $index->refresh();
+        
+        $exists = $type->existsDocument('existsDocument');
+        
+        $this->assertTrue($exists);
+        
+        $noExists = $type->existsDocument('konstantynopolitanczykiewiczowna');
+        
+        $this->assertFalse($noExists);
+    }
+    
+    
 }
 
 class SerializerMock
